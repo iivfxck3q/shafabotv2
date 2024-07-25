@@ -5,9 +5,10 @@ import PyInstaller.__main__
 PyInstaller.__main__.run([
     'app.py',
     '--onefile',
-    '--windowed',
+    '--clean',
     '--upx-dir=upx/',
     '--hidden-import=flet',
+    '--distpath=.',
 ])
 
 print("Сборка завершена!")

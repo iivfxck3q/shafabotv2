@@ -2,3 +2,4 @@ dist/
 build/
 library/__pycache__
 app.spec
+app.exe
