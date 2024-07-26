@@ -18,13 +18,6 @@ class App:
         self.accountsSelected = {}
         self.initdownloadselected = None
 
-        self.page.add(
-            ft.TextButton(
-                text="Text button", on_click=lambda x: print(library.parsers.fashiongirl.loader(library.parsers.fashiongirl.parsing()))),
-            ft.TextButton(
-                text="Text button", on_click=lambda x: print(library.parsers.fashiongirl.DataCollection)),
-        )
-
         atexit.register(self.quit)
 
     def button_clicked(self, e):

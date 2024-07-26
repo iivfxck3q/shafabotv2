@@ -115,5 +115,4 @@ def loader(datas: DataCollection) -> PostDataCollection:
 
         post_col.put(PostData(
             photos, title, description, category, subcategory, sizes, colors, amount, price))
-        print(post_col)
     return post_col
