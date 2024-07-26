@@ -1,11 +1,42 @@
-import importlib.util
-import sys
+import flet as ft
+import atexit
+import library.parsers.fashiongirl
 
-library_path = 'library/hook.py'
 
-spec = importlib.util.spec_from_file_location("hook", library_path)
-hook = importlib.util.module_from_spec(spec)
-sys.modules["hook"] = hook
-spec.loader.exec_module(hook)
+class App:
+    def __init__(self, page: ft.Page):
+        self.page = page
+        self.page.title = 'Shafa Bot v2'
+        self.page.window.width = 720
+        self.page.window.height = 600
+        self.page.window.resizable = True
+        self.page.window.center()
+        self.page.window.full_screen = False
+        self.page.vertical_alignment = ft.MainAxisAlignment.START
+        self.page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.selected = {}
+        self.accountsSelected = {}
+        self.initdownloadselected = None
 
-hook.main()
+        self.page.add(
+            ft.TextButton(
+                text="Text button", on_click=lambda x: print(library.parsers.fashiongirl.loader(library.parsers.fashiongirl.parsing()))),
+            ft.TextButton(
+                text="Text button", on_click=lambda x: print(library.parsers.fashiongirl.DataCollection)),
+        )
+
+        atexit.register(self.quit)
+
+    def button_clicked(self, e):
+        self.page.dialog("Button clicked!")
+
+    def quit(self):
+        self.page.window_destroy()
+
+
+def run():
+    ft.app(App)
+
+
+if __name__ == '__main__':
+    run()

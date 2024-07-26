@@ -1,16 +1,23 @@
 # build.py
 
 import PyInstaller.__main__
+import os
+import platform
 
 PyInstaller.__main__.run([
     'app.py',
     '--onefile',
-    '--windowed',
+    # '--windowed',
     '--clean',
     '--upx-dir=upx/',
     '--distpath=.',
-    '--hidden-import=flet',
-    '--hidden-import=atexit',
 ])
+
+
+system = platform.system()
+if system == 'Windows':
+    os.system('cls')
+else:
+    os.system('clear')
 
 print("Сборка завершена!")
