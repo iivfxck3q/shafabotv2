@@ -101,7 +101,6 @@ def parsing() -> DataCollection:
 def loader(datas: DataCollection) -> PostDataCollection:
     post_col = PostDataCollection()
     for data in datas.data:
-        print(1)
         response = requests.get(data.url)
         html_content = response.text
 

@@ -20,9 +20,6 @@ class App:
 
         atexit.register(self.quit)
 
-        library.parsers.fashiongirl.loader(
-            library.parsers.fashiongirl.parsing())
-
     def quit(self):
         self.page.window_destroy()
 
