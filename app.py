@@ -20,8 +20,8 @@ class App:
 
         atexit.register(self.quit)
 
-    def button_clicked(self, e):
-        self.page.dialog("Button clicked!")
+        library.parsers.fashiongirl.loader(
+            library.parsers.fashiongirl.parsing())
 
     def quit(self):
         self.page.window_destroy()

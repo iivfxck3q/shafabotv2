@@ -1,6 +1,9 @@
+from tabulate import tabulate
 from bs4 import BeautifulSoup
 import requests
+import base64
 import json
+import library.files
 
 
 class Data:
@@ -27,6 +30,9 @@ class PostData:
     def __repr__(self):
         return (f"PostData(photos={self.photos}, title='{self.title}', description='{self.description}', category='{self.category}', subcategory='{self.subcategory}', sizes={self.sizes}, colors={self.colors}, amount={self.amount}, price={self.price})")
 
+    def __str__(self) -> str:
+        return (f"PostData(photos={self.photos}, title='{self.title}', description='{self.description}', category='{self.category}', subcategory='{self.subcategory}', sizes={self.sizes}, colors={self.colors}, amount={self.amount}, price={self.price})")
+
 
 class DataCollection:
     def __init__(self):
@@ -44,7 +50,19 @@ class PostDataCollection:
         self.data = []
 
     def put(self, data: PostData):
-        self.data.append(data)
+        if len(self.data) < 10:
+            self.data.append(data)
+        else:
+            self.save()
+
+    def save(self):
+        save_txt = ''
+        for data in self.data:
+            save_txt += str(data)+'\n'
+        library.files.write_txt('data/fashiongirl.data',
+                                save_txt)
+        self.data = []
+        print('save!')
 
     def __repr__(self):
         return f"PostDataCollection(data={self.data})"
@@ -83,15 +101,34 @@ def parsing() -> DataCollection:
 def loader(datas: DataCollection) -> PostDataCollection:
     post_col = PostDataCollection()
     for data in datas.data:
+        print(1)
         response = requests.get(data.url)
         html_content = response.text
 
         soup = BeautifulSoup(html_content, 'html.parser')
 
-        photos = 'photos'
+        photos = []
+        for url in soup.find_all('img', class_='b-images__img'):
+            photo = requests.get(url.get('src').replace(
+                'w100', 'w640').replace('h100', 'h640'))
+            photos.append(base64.b64encode(photo.content).decode('utf-8'))
+
         title = soup.find(
             'span', attrs={'data-qaid': 'product_name'}).text.replace('оптом', '')
-        description = 'desc'
+        description = []
+
+        table = soup.find_all(id='sizing_table')
+        table = table[len(table)-1]
+
+        for tr in table.find_all('tr'):
+            line = []
+            for td in tr.find_all('td'):
+                if td.text != '':
+                    line.append(td.text)
+            description.append(line)
+
+        description = tabulate(
+            description, headers="firstrow", tablefmt="plain").replace('\n', '||')
 
         def unpack():
             return data.category.split('+')

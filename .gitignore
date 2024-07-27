@@ -5,3 +5,4 @@ library/parsers/__pycache__
 app.spec
 app.exe
 .vscode/
+data/
